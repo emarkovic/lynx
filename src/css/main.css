@@ -1,0 +1,18 @@
+.padding20Left {
+	padding-left: 20px;
+}
+.signOut {
+	/*position: absolute; */
+	/*top: 24px; */
+	/*right: 75.5px; */
+	float: right;
+	color: white;
+	height: 75.5px;
+	width: 75.5px;
+	font-size: 14px;
+	text-transform: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: lighter;
+}
