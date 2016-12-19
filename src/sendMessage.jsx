@@ -23,6 +23,7 @@ export default class extends React.Component {
 	}
 
 	handleCancel() {
+		console.log('handle cancel')
 		this.setState({to: '', url: '', description: ''});
 	}
 
@@ -33,7 +34,7 @@ export default class extends React.Component {
 	}
 
 	handleSubmit() {
-		console.log(this.state)
+		console.log('handle submit')
 		store.dispatch(sendMessage({to: this.state.to, url: this.state.url, description: this.state.description}));
 		this.handleCancel();
 
@@ -60,10 +61,7 @@ export default class extends React.Component {
 				/>
 			);
 			sendMessage = (									
-					<form 
-						style={{clear: 'both'}}
-						onSubmit={() => this.handleSubmit()}
-					>
+					<form style={{clear: 'both'}}>
 						<Textfield
 						    onChange={(event) => this.handleChange(event, 'to')}
 						    label="To..."								  
@@ -96,6 +94,7 @@ export default class extends React.Component {
 							style={{float: 'right', width: '100px'}} 
 							raised 
 							accent
+							onClick={() => this.handleSubmit()}
 						>Send</Button>
 					</form>			
 			);			

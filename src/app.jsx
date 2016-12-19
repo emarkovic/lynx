@@ -51,8 +51,8 @@ export default class extends React.Component {
 		}
 		if (this.state.sentMessages) {
 			console.log(this.state)
-			sentMessages = this.state.sentMessages.map(message => (
-				<div>
+			sentMessages = this.state.sentMessages.map((message, i) => (
+				<div key={i}>
 					<p>to: {message.to}</p>
 					<p>url: {message.url}</p>
 					<p>description: {message.description}</p>
