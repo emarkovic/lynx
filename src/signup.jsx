@@ -63,7 +63,6 @@ export default class extends React.Component {
 			var photoUrl = 'https://www.gravatar.com/avatar/' + md5(this.state.email);
 			this.firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
 				.then(user => {
-					console.log(user);
 					self.setState({currentUser: user});
 					return user.updateProfile({
 			    		displayName: self.state.name,

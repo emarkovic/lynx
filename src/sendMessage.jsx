@@ -23,7 +23,6 @@ export default class extends React.Component {
 	}
 
 	handleCancel() {
-		console.log('handle cancel')
 		this.setState({to: '', url: '', description: ''});
 	}
 
@@ -34,7 +33,6 @@ export default class extends React.Component {
 	}
 
 	handleSubmit() {
-		console.log('handle submit')
 		store.dispatch(sendMessage({to: this.state.to, url: this.state.url, description: this.state.description}));
 		this.handleCancel();
 

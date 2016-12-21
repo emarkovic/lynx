@@ -11,6 +11,7 @@ export default class extends React.Component {
 		super(props);
 		this.state = {			
 		}
+		this.firebase = this.props.firebase;
 	}
 
 	signOut() {		
