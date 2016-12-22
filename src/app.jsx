@@ -7,6 +7,7 @@ import "whatwg-fetch";
 import Sidebar from './sidebar.jsx'
 import Navbar from './navbar.jsx'
 import SendMessage from './sendMessage.jsx'
+import MessageArea from './messageArea.jsx'
 
 import {store, removeFavorite} from './shared-state.js'
 
@@ -26,18 +27,7 @@ export default class extends React.Component {
 		var self = this;
 		this.firebase.auth().onAuthStateChanged(function(user) {
 			if (user) {
-				self.setState({currentUser: user});
-				self.unsub = store.subscribe(() => self.setState(store.getState()));
-
-				self.sentMessagesRef = self.firebase.database().ref('messages/' + self.state.currentUser.uid + '/sent');
-				self.receivedMessagesRef = self.firebase.database().ref('messages/' + self.state.currentUser.uid + '/received');						
-
-				self.sentMessagesRef.on('value', snapshot => {
-					
-				});
-
-				self.receivedMessagesRef.on('value', console.log)
-
+				self.setState({currentUser: user});				
 			} else {
 				window.location = "/?#/signin";
 			}
@@ -45,23 +35,13 @@ export default class extends React.Component {
 		});	
 	}
 
-	componentWillUnmount() {
-        this.unsub();
-    }
-
 	render() {
-		var sendMessage, navbar, sentMessages;
+		var sendMessage, navbar, sentMessages, messageArea;
 		if (this.state.currentUser) {
 			navbar = <Navbar firebase={this.firebase} currentUser={this.state.currentUser} />			
 		}
-		if (this.state.sentMessages) {
-			sentMessages = this.state.sentMessages.map((message, i) => (
-				<div key={i}>
-					<p>to: {message.to}</p>
-					<p>url: {message.url}</p>
-					<p>description: {message.description}</p>
-				</div>
-			))
+		if (this.state.currentUser) {
+			messageArea = <MessageArea currentUser={this.state.currentUser} firebase={this.firebase}/>;
 		}
 		return (
 			<div className="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
@@ -69,9 +49,9 @@ export default class extends React.Component {
 			    <main className="mdl-layout__content">
 				    <div className="page-content">
 				    	{navbar}
-				    	<SendMessage />			
-				    </div>
-				    {sentMessages}
+				    	<SendMessage />		
+						{messageArea}
+				    </div>				    				    
 			    </main>
 			</div>
 		);	
