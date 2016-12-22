@@ -25,7 +25,7 @@ export default class extends React.Component {
 	}
 
 	componentWillUnmount() {
-
+		this.friendsRef.off();
 	}
 
 	render() {

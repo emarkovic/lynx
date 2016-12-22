@@ -9,8 +9,6 @@ import Sidebar from './sidebar.jsx'
 export default class extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {			
-		}
 		this.firebase = this.props.firebase;
 	}
 
@@ -23,7 +21,18 @@ export default class extends React.Component {
 	render() {
 		var profPic, name, sendMessage;
 		if (this.props.currentUser) {
-			name = <h2 style={{float: 'left', margin: '14px 0', fontWeight: 'lighter'}} className="padding20Left">Hello, {this.props.currentUser.displayName}</h2>;
+			name = (
+				<h2 
+					style={{
+						float: 'left', 
+						margin: '14px 0', 
+						fontWeight: 'lighter'
+					}} 
+					className="padding20Left"
+				>
+					Hello, {this.props.currentUser.displayName}
+				</h2>
+			);
 			profPic = (
 				<img 
 					style={{

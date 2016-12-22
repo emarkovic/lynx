@@ -8,9 +8,7 @@ export default class extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			// activeTab false = received
 			activeTab: 0,
-			// these two will be firebase snapshots, iterate with forEach
 			receivedMessages: null,
 			sentMessages: null			
 		}
@@ -45,7 +43,7 @@ export default class extends React.Component {
 
 		if (iterator) {
 			tabContent = [];
-			iterator.forEach((snapshot, i) => {
+			iterator.forEach(snapshot => {
 				// message contains description, read, person (recipient or sender), url
 				var message = snapshot.val();
 				tabContent.push(<Message key={snapshot.key} sentTab={this.state.activeTab} message={message}/>);
