@@ -1,21 +1,21 @@
 import React from "react";
 import {render} from "react-dom";
-import {Button, FABButton, Textfield, IconButton} from "react-mdl";
+import {Button, FABButton, Textfield, IconButton, Spinner} from "react-mdl";
 import './css/main.css'
 import "whatwg-fetch";
-
-import {store, sendMessage} from './shared-state.js';
 
 export default class extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			expandSendMessage: false,
-		
+			expandSendMessage: true,		
 			to: '',
 			url: '',
-			description: ''				
+			description: '',
+			error: null,
+			status: null
 		}		
+		this.firebase = this.props.firebase;
 	}
 	
 	toggleSendMessage() {
@@ -27,19 +27,64 @@ export default class extends React.Component {
 	}
 
 	handleChange(event, type) {
-		this.setState({			
-			[type] : event.target.value			
-		});
+		this.setState({[type] : event.target.value, error: null, status: null});
 	}
 
-	handleSubmit() {
-		store.dispatch(sendMessage({to: this.state.to, url: this.state.url, description: this.state.description}));
-		this.handleCancel();
+	handleSend() {
+		//push to firebase ... add friend validation later
+		
+		var senderEmail = this.props.currentUser.email.replace('@', 'at').replace('.', 'dot');
+		//put in the proper person's firebase -> must get their uid first
+		var recipientEmail = this.state.to.replace('@', 'at').replace('.', 'dot');
+		var self = this;
+		this.firebase.database().ref('users/' + recipientEmail).once('value')
+			.then(snapshot => {
+				var user = snapshot.val();
+				if (!user) {
+					self.setState({error: 'User does not exist.'});
+					return null;
+				}	
+				if (!user.friends[senderEmail] && senderEmail !== recipientEmail) {
+					self.setState({error: 'Cannot send message to user who is not a friend.'});
+					return null;
+				}
+				self.setState({status: 'sending'});
+				return user;			
+			})
+			.then(user => {
+				if (user) {
+					//recipient
+					var self2 = self;
+					self.firebase.database().ref('messages/' + user.uid + '/received').push({
+						description: self.state.description,
+						person: self.props.currentUser.email,
+						read: false,
+						url: self.state.url
+					});
+					//add to send
+					self.firebase.database().ref('messages/' + self.props.currentUser.uid + '/sent').push({
+						description: self.state.description,
+						person: self.state.to,
+						read: false,
+						url: self.state.url
+					})
+				}
+			})
+			.then(() => {				
+				self.setState({status: 'sent'});
+				self.handleCancel();
+			})
+			.catch(error => {
+				console.error(error)
+				self.setState({error: 'A problem occurred sending the message. Please try again.', status: null});
+			})
+		//add to sent when everything is good
+		
 
 	}
 
 	render() {
-		var sendMessage, button, 
+		var sendMessage, button, error, status, 
 			sendStyle = {
 				clear: 'both', 
 				paddingLeft: '60px', 
@@ -49,6 +94,16 @@ export default class extends React.Component {
 				paddingTop: '24px',
 				paddingBottom: this.state.expandSendMessage ? '24px' : '0'
 			};
+		if (this.state.error) {
+			error = <p style={{textAlign: 'center', color: 'red'}}>{this.state.error}</p>;
+		}
+		if (this.state.status) {
+			if (this.state.status === 'sending') {
+				status = <Spinner />;
+			} else {
+				status = <p style={{textAlign: 'center', color: 'rgb(105,240,174)'}}>Message sent!</p>
+			}
+		}
 		if (this.state.expandSendMessage) {			
 			button = (
 				<IconButton 
@@ -92,8 +147,10 @@ export default class extends React.Component {
 							style={{float: 'right', width: '100px'}} 
 							raised 
 							accent
-							onClick={() => this.handleSubmit()}
+							onClick={() => this.handleSend()}
 						>Send</Button>
+						{status}
+						{error}
 					</form>			
 			);			
 		} else {

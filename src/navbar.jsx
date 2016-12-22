@@ -28,7 +28,7 @@ export default class extends React.Component {
 						margin: '14px 0', 
 						fontWeight: 'lighter'
 					}} 
-					className="padding20Left"
+					className="padding-20-left"
 				>
 					Hello, {this.props.currentUser.displayName}
 				</h2>
