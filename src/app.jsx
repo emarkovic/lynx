@@ -9,8 +9,6 @@ import Navbar from './navbar.jsx'
 import SendMessage from './sendMessage.jsx'
 import MessageArea from './messageArea.jsx'
 
-import {store, removeFavorite} from './shared-state.js'
-
 export default class extends React.Component {
 	constructor(props) {
 		super(props);
@@ -36,20 +34,20 @@ export default class extends React.Component {
 	}
 
 	render() {
-		var sendMessage, navbar, sentMessages, messageArea;
+		var sidebar, navbar, sendMessage, messageArea;
 		if (this.state.currentUser) {
-			navbar = <Navbar firebase={this.firebase} currentUser={this.state.currentUser} />			
-		}
-		if (this.state.currentUser) {
-			messageArea = <MessageArea currentUser={this.state.currentUser} firebase={this.firebase}/>;
+			sidebar 	= <Sidebar 		currentUser={this.state.currentUser} firebase={this.firebase} />
+			navbar 		= <Navbar 		currentUser={this.state.currentUser} firebase={this.firebase} />	
+			messageArea = <MessageArea 	currentUser={this.state.currentUser} firebase={this.firebase} />;
+			sendMessage = <SendMessage 	currentUser={this.state.currentUser} firebase={this.firebase} />;		
 		}
 		return (
 			<div className="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
-			    <Sidebar />
+			    {sidebar}
 			    <main className="mdl-layout__content">
 				    <div className="page-content">
 				    	{navbar}
-				    	<SendMessage />		
+				    	{sendMessage}
 						{messageArea}
 				    </div>				    				    
 			    </main>
