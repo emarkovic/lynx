@@ -56,6 +56,7 @@ export default class extends React.Component {
 					//recipient
 					var self2 = self;
 					self.firebase.database().ref('messages/' + user.uid + '/received').push({
+						timestamp: 
 						description: self.state.description,
 						person: self.props.currentUser.email,
 						read: false,

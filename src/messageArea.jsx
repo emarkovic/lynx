@@ -19,10 +19,10 @@ export default class extends React.Component {
 		this.sentMessagesRef = this.firebase.database().ref('messages/' + this.props.currentUser.uid + '/sent');
 		this.receivedMessagesRef = this.firebase.database().ref('messages/' + this.props.currentUser.uid + '/received');						
 		
-		this.receivedMessagesRef.on('value', snapshot => {
+		this.receivedMessagesRef.orderByChild('description').on('value', snapshot => {
 			this.setState({receivedMessages: snapshot})
 		});		
-		this.sentMessagesRef.on('value', snapshot => {
+		this.sentMessagesRef.orderByChild('description').on('value', snapshot => {
 			this.setState({sentMessages: snapshot})
 		});		
 	}
