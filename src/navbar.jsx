@@ -15,7 +15,7 @@ export default class extends React.Component {
 	signOut() {		
 		console.log('signed out')
 		this.firebase.auth().signOut()
-			.then(() => window.location="/?#/signin");
+			.then(() => window.location.replace("/signin"))
 	}
 
 	render() {
