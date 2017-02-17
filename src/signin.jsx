@@ -43,7 +43,7 @@ export default class extends React.Component {
 		if (this.validated()) {
 			this.firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
 				.then(() => {
-					window.location.replace('lynx/');
+					window.location.replace('#/');
 				})
 				.catch(console.error);
 		}							
