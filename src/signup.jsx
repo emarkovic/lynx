@@ -88,7 +88,7 @@ export default class extends React.Component {
 					console.error(err);
 				})
 				.then(() => {
-					window.location.replace('/');
+					window.location.replace('lynx/');
 				});
 
 		}

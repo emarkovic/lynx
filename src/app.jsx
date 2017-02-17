@@ -28,7 +28,7 @@ export default class extends React.Component {
 			if (user) {
 				self.setState({currentUser: user});				
 			} else {
-				window.location.replace("/signin");
+				window.location.replace("lynx/signin");
 			}
 			return user;
 		});	
