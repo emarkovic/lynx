@@ -11,7 +11,8 @@ export default class extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			friends: null
+			friends: null,
+			tags: null
 		}		
 		this.firebase = this.props.firebase;
 	}
@@ -22,6 +23,10 @@ export default class extends React.Component {
 		this.friendsRef.on('value', snapshot => {
 			this.setState({friends: snapshot})
 		});
+		this.tagsRef = this.firebase.database().ref('messages/' + this.props.currentUser.uid + '/tags');
+		this.tagsRef.on('value', snapshot => {
+			this.setState({tags: snapshot})
+		});
 	}
 
 	componentWillUnmount() {
@@ -29,7 +34,7 @@ export default class extends React.Component {
 	}
 
 	render() {
-		var friends;
+		var friends, tags, tags2;
 		if (this.state.friends) {
 			friends = []
 			this.state.friends.forEach(snapshot => {
@@ -40,6 +45,21 @@ export default class extends React.Component {
 			friends = <p>No friends yet, add some!</p>
 		}
 		
+		if (this.state.tags) {
+			tags = {};
+			tags2 = [];
+			this.state.tags.forEach(snapshot => {
+				let value = snapshot.val().tags;
+				if (value) {
+					value.forEach(tag => {
+						tags2.push(<p key={Math.random()} onClick={this.props.filterByTag(tag)}>{tag}</p>);
+					})
+				}
+				
+			});
+			
+		}
+
 		return (
 		    <div className="mdl-layout__drawer">
 				<h1 
@@ -55,6 +75,13 @@ export default class extends React.Component {
 			   	> 
 					{friends}
 			   </List>
+			   <h4 
+		    		style={{margin: '0'}} 
+		    		className="padding-20-left"
+		    	>Tags</h4>
+		    	<div className="padding-20-left">
+		    		{tags2}
+		    	</div>
 		    </div>			   
 		);	
 	}

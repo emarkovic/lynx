@@ -15,7 +15,8 @@ export default class extends React.Component {
 		this.state = {
 			currentUser: null,
 			sentMessages: null,
-			receivedMessages: null
+			receivedMessages: null,
+			tag: null
 		}
 		this.firebase = this.props.route.firebase;
 	}
@@ -33,12 +34,16 @@ export default class extends React.Component {
 		});	
 	}
 
+	filterByTag(tag) {
+		// this.setState({tag: tag});
+	}  
+
 	render() {
 		var sidebar, navbar, sendMessage, messageArea;
 		if (this.state.currentUser) {
-			sidebar 	= <Sidebar 		currentUser={this.state.currentUser} firebase={this.firebase} />
+			sidebar 	= <Sidebar 		currentUser={this.state.currentUser} firebase={this.firebase} filterByTag={this.filterByTag}/>
 			navbar 		= <Navbar 		currentUser={this.state.currentUser} firebase={this.firebase} />	
-			messageArea = <MessageArea 	currentUser={this.state.currentUser} firebase={this.firebase} />;
+			messageArea = <MessageArea 	currentUser={this.state.currentUser} firebase={this.firebase} tag={this.state.tag}/>;
 			sendMessage = <SendMessage 	currentUser={this.state.currentUser} firebase={this.firebase} />;		
 		}
 		return (

@@ -8,7 +8,7 @@ export default class extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			activeTab: 0,
+			activeTab: 1,
 			receivedMessages: null,
 			sentMessages: null			
 		}
@@ -33,6 +33,7 @@ export default class extends React.Component {
 	}
 
 	render() {
+		console.log(this.props.tags)
 		var tabContent, iterator, areaStyle = {padding: '24px 60px'};
 		
 		if (this.state.activeTab === 0) {

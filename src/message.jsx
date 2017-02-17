@@ -12,6 +12,10 @@ export default class extends React.Component {
 	}
 	render() {
 		var photoUrl = 'https://www.gravatar.com/avatar/' + md5(this.props.message.person);
+		var tags; 
+		if (this.props.message.tags) {
+			tags = <p>Tags: {this.props.message.tags.join(' ')}</p>
+		}
 		return (
 			<div style={{display: 'flex', borderBottom: '1px solid #e0e0e0'}}>
 				<div style={{width: '20%', marginBottom: '15px'}}>
@@ -36,6 +40,7 @@ export default class extends React.Component {
 				<div style={{marginTop: '20px'}}>
 					<h5><a href={this.props.message.url}>{this.props.message.url}</a></h5>
 					<p>{this.props.message.description}</p>
+					{tags}
 				</div>													
 			</div>
 		);		

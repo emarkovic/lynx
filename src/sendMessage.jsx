@@ -12,8 +12,9 @@ export default class extends React.Component {
 			to: '',
 			url: '',
 			description: '',
+			tags: [],
 			error: null,
-			status: null
+			status: null			
 		}		
 		this.firebase = this.props.firebase;
 	}
@@ -23,11 +24,17 @@ export default class extends React.Component {
 	}
 
 	handleCancel() {
-		this.setState({to: '', url: '', description: ''});
+		this.setState({to: '', url: '', description: '', tags: []});
 	}
 
 	handleChange(event, type) {
-		this.setState({[type] : event.target.value, error: null, status: null});
+		let value;
+		if (type === 'tags') {
+			value = event.target.value.split(' ');
+		} else {
+			value = event.target.value;
+		}
+		this.setState({[type] : value, error: null, status: null});
 	}
 
 	handleSend() {
@@ -56,7 +63,6 @@ export default class extends React.Component {
 					//recipient
 					var self2 = self;
 					self.firebase.database().ref('messages/' + user.uid + '/received').push({
-						timestamp: 
 						description: self.state.description,
 						person: self.props.currentUser.email,
 						read: false,
@@ -67,8 +73,13 @@ export default class extends React.Component {
 						description: self.state.description,
 						person: self.state.to,
 						read: false,
-						url: self.state.url
-					})
+						url: self.state.url,
+						tags: self.state.tags
+					});
+					//add to tags
+					self.firebase.database().ref('messages/' + self.props.currentUser.uid + '/tags').push({						
+						tags: self.state.tags
+					});
 				}
 			})
 			.then(() => {				
@@ -136,6 +147,13 @@ export default class extends React.Component {
 						    rows={3}
 						    style={{width: '100%'}}
 						    value={this.state.description}
+						/>
+						<Textfield
+						    onChange={(event) => this.handleChange(event, 'tags')}
+						    label="Tags..."								  
+						    type="text"
+						    style={{width: '100%'}}
+						    value={this.state.tags.join(' ')}
 						/>
 						<Button 
 							style={{float: 'left', width: '100px'}} 
